@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leonida Trophy Guide — GTA VI, all 55 trophies</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="masthead-copy">
+    <p class="kicker">Grand Theft Auto VI · PlayStation 5</p>
+    <h1>Leonida Trophy Guide</h1>
+    <p class="lede">Every one of the 55 official trophies, with a tracker, a road to the platinum, and a cited guide for each.</p>
+  </div>
+  <div class="progress" id="progress">
+    <div class="big"><span id="earnedCount">0</span><span class="of"> / 55 earned</span></div>
+    <div class="bar"><div id="barFill"></div></div>
+    <p id="gradeCounts" class="grades"></p>
+  </div>
+</header>
+<nav class="tabs" id="tabs">
+  <a href="#/" data-view="checklist">Checklist</a>
+  <a href="#/roadmap" data-view="roadmap">Roadmap</a>
+  <a href="#/missables" data-view="missables">Missables</a>
+</nav>
+<section class="controls" id="controls">
+  <input id="search" type="search" placeholder="Search trophies…" aria-label="Search trophies">
+  <select id="kindFilter" aria-label="Filter by kind">
+    <option value="all">All kinds</option>
+    <option value="story">Story</option>
+    <option value="side">Side missions</option>
+    <option value="activity">Activities</option>
+    <option value="collectible">Collectibles</option>
+    <option value="crime">Crime &amp; robberies</option>
+    <option value="exploration">Exploration</option>
+    <option value="money">Money</option>
+    <option value="completion">100% completion</option>
+    <option value="misc">Secrets &amp; misc</option>
+    <option value="platinum">Platinum</option>
+  </select>
+  <select id="gradeFilter" aria-label="Filter by grade">
+    <option value="all">All grades</option>
+    <option value="platinum">Platinum</option>
+    <option value="gold">Gold</option>
+    <option value="silver">Silver</option>
+    <option value="bronze">Bronze</option>
+  </select>
+  <select id="statusFilter" aria-label="Filter by earned state">
+    <option value="all">Earned &amp; unearned</option>
+    <option value="earned">Earned</option>
+    <option value="unearned">Not earned</option>
+  </select>
+  <label class="check"><input id="missableOnly" type="checkbox"> Missable only</label>
+  <label class="check"><input id="spoilerToggle" type="checkbox" checked> Hide story &amp; secret trophies</label>
+  <button id="exportBtn" type="button">Export progress</button>
+  <label class="import">Import progress <input id="importFile" type="file" accept="application/json"></label>
+</section>
+<div class="layout">
+  <main id="view"><p class="loading">Loading the trophy list…</p></main>
+  <aside id="detail" aria-label="Trophy guide"></aside>
+</div>
+<footer>
+  <p>Names, descriptions and grades are the official PlayStation 5 list, as published on Exophase and PSNProfiles — the two agree on every name, description and grade. Each guide is written for this page, in its own words, and names its sources beside it; where a trigger is not yet pinned down by published guides, the guide says so plainly.</p>
+  <p>Sources: Exophase (official list) · PSNProfiles (list and PSN counts) · PowerPyx (roadmap, missable warning, 100% checklist) · Push Square (roadmap) · GameMapa (counts, unsolved trophies) · GTA Scoop (stranger missions). This guide works offline from its own files and makes no network request. No Rockstar Games logo or official artwork is used.</p>
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>
