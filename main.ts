@@ -1,14 +1,17 @@
-// Leonida Platinum — the hand-in program for gta6-trophy-guide-01.
-// The entry is an offline static web app (Node 22, standard library only):
-//   app/index.html        the guide, opens in desktop Chrome with the network off
-//   app/data/trophies.json  all 55 official trophies, each with a cited guide
-//   screenshots/            four real renders of the app in a browser
-// This program gathers app/ and screenshots/ from beside this file into
-// /output and writes /output/dossier.json through the vendored make.fun
-// library. The library itself stays untouched: the sealed scorer rebuilds
-// the dossier from its own copy, and the two must agree byte for byte.
+// Sunset Platinum — the hand-in program for gta6-trophy-guide-01.
 //
-// Try the guide with `node serve.ts`, then open http://localhost:8080.
+// The entry is a static web app (Node 22, standard library only). This
+// program gathers what the grader needs from beside this file into the
+// output directory and writes the dossier with the vendored make.fun
+// library, which is left exactly as shipped: the sealed scorer rebuilds
+// the dossier from its own copy, and the two copies must match byte for
+// byte.
+//
+//   app/index.html          the guide; runs in desktop Chrome, network off
+//   app/data/trophies.json  all 55 official trophies, each with a guide
+//   screenshots/            four real renders of the app in a browser
+//
+// Local try: `node serve.ts`, then open http://localhost:8080.
 // Outside the grader, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
@@ -17,30 +20,40 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
 
-const repoRoot = fileURLToPath(new URL('.', import.meta.url));
-const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const here = fileURLToPath(new URL('.', import.meta.url));
+const destination = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-if (!existsSync(join(repoRoot, 'app', 'index.html'))) {
-  throw new Error('app/index.html is missing — nothing to hand in');
+function fail(message: string): never {
+  throw new Error(message);
 }
-const shots = existsSync(join(repoRoot, 'screenshots'))
-  ? readdirSync(join(repoRoot, 'screenshots')).filter((n) => !n.startsWith('.'))
-  : [];
+
+function listShots(): string[] {
+  const dir = join(here, 'screenshots');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).filter((name) => !name.startsWith('.'));
+}
+
+if (!existsSync(join(here, 'app', 'index.html'))) {
+  fail('app/index.html is missing — there is nothing to hand in');
+}
+
+const shots = listShots();
 if (shots.length < 3 || shots.length > 4) {
-  throw new Error(`expected 3 or 4 screenshots, found ${shots.length}`);
+  fail(`expected 3 or 4 screenshots, found ${shots.length}`);
 }
 
-mkdirSync(outDir, { recursive: true });
-cpSync(join(repoRoot, 'app'), join(outDir, 'app'), { recursive: true });
-cpSync(join(repoRoot, 'screenshots'), join(outDir, 'screenshots'), { recursive: true });
+mkdirSync(destination, { recursive: true });
+cpSync(join(here, 'app'), join(destination, 'app'), { recursive: true });
+cpSync(join(here, 'screenshots'), join(destination, 'screenshots'), { recursive: true });
 
-// The scorer's caps: text_max_bytes shapes the dossier text; the rest refuse
-// an entry the sealed scorer would refuse anyway (a screenshot over 256 KiB
-// or more than 4 of them; app/ past 993 files and directories or 48 MiB —
-// app/ shares /output's own 1000-entry cap with screenshots/ and dossier.json).
+// These caps mirror the sealed scorer's own limits, so an entry this
+// program accepts is one the scorer accepts too: the dossier text cap,
+// at most 4 screenshots of at most 256 KiB each, and app/ kept inside
+// 993 files and directories / 48 MiB (app/ shares /output's own
+// 1000-entry cap with screenshots/ and dossier.json).
 writeFileSync(
-  join(outDir, 'dossier.json'),
-  buildDossier(outDir, {
+  join(destination, 'dossier.json'),
+  buildDossier(destination, {
     text_max_bytes: 163840,
     screenshots: { max: 4, max_bytes: 262144 },
     app_max_files: 993,
